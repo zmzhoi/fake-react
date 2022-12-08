@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "fake-react",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "baseUrl": ".",
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "paths": {
+      "fake-react": ["./src/index.js"],
+      "fake-react/jsx-runtime": ["./src/jsx-runtime"],
+    },
+  },
+  "include": ["./src", "example"]
+}
