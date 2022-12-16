@@ -1,12 +1,15 @@
 # Fake React
 React 동작 방식을 이해하기 위해 만들어보는 ~~가짜 리액트~~
 
-## Features.
+## Goals.
 - [x] JSX Rendering.
 - [x] Diffing virtual dom. 
 - [x] Detect State and Props.
-- [ ] Track `onchange` event of input tag.
-- [ ] Optimization, Reafactoring.
+- [ ] Handle `onChange` event of input[type=text].
+- [ ] Lifecycle.
+- [ ] Optimization, Refactoring.
+- [ ] Event delegation.
+- [ ] Function component with hooks.
 
 
 ## Installation
