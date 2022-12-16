@@ -11,7 +11,7 @@ const config = defineConfig({
 if (DEV) {
   config['entry'] = ['example/index.tsx'];
   config['outDir'] = 'example/public/js';
-  config['sourcemap'] = true;
+  config['sourcemap'] = 'inline';
   config['onSuccess'] = DevServer;
 } else {
   config['entry'] = ['src/index.tsx', 'src/jsx-runtime/index.ts'];

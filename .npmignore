@@ -1,7 +1,8 @@
-dist
+docs
 example
 src
 .eslintrc
+.gitignore
+.prettierrc
 tsconfig.json
 tsup.config.ts
-.prettierrc
