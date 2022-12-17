@@ -60,15 +60,16 @@ function onClickRoot(event) {
 function dispatchEvent(...) {
   // ..생략..
 
-  const targetFiber = getTargetFiber(target);
+  let targetFiber = getTargetFiber(target);
   
   do {
     if(targetFiber.props[eventType]) {
       clickEventListenrQueue.push(targetFiber.props[eventType]);
     }
-    const parentFiber = getParentFiberFrom(targetFiber);
-  } while(parentFiber !== root.fiber)
+    targetFiber = getParentFiberFrom(targetFiber);
+  } while(targetFiber !== root.fiber)
 
+  let isPropagationStopped = false;
   clickEventListenrQueue.forEach(clickEventListener => {
     if(isPropagationStopped) {
       return;
