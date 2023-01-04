@@ -1,11 +1,14 @@
-import { Component } from '../../src';
+import { Component } from '../../src/fake-react/refactor/Component';
 import Todo from './Todo';
 
 export default class Todos extends Component {
   init() {
     this.state = {
       keyword: '',
-      todos: [],
+      todos: [
+        { name: '가짜 투두1', done: false },
+        { name: '가짜 투두2', done: false },
+      ],
     };
   }
 
@@ -17,9 +20,10 @@ export default class Todos extends Component {
       ),
     });
   };
+
   onChange = (event) => {
     const nextValue = event.target.value;
-    console.log(nextValue);
+
     this.setState({
       ...this.state,
       keyword: nextValue,
@@ -28,6 +32,10 @@ export default class Todos extends Component {
 
   onKeyDown = (event) => {
     if (event.key === 'Enter') {
+      if (event.isComposing) {
+        return;
+      }
+
       if (event.target.value.trim() === '') {
         alert('입력값이 없습니다.');
         return;
@@ -39,48 +47,23 @@ export default class Todos extends Component {
       });
     }
   };
+
   template() {
     const { onChange, onKeyDown, onToggle } = this;
     const { keyword, todos } = this.state;
     const { title } = this.props;
 
     return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-          minWidth: '300px',
-          width: '50vw',
-          margin: '1rem auto',
-        }}
-      >
-        <p
-          style={{
-            fontSize: '1.5rem',
-            width: '50vw',
-            textAlign: 'center',
-            borderBottom: '1px solid black',
-            paddingBottom: '0.5rem',
-          }}
-        >
-          {title}
-        </p>
+      <div style={containerStyle}>
+        <p style={paragraphStyle}>{title}</p>
         <input
           type="text"
           value={keyword}
           onChange={onChange}
           onKeyDown={onKeyDown}
-          style={{
-            padding: '7px 12px',
-            border: '1px solid #bdbdbd',
-            borderRadius: '4px',
-            fontSize: '1rem',
-            fontWeight: '500',
-            margin: '1rem 0',
-          }}
+          style={inputStyle}
         />
-        <ul style={{ padding: '1rem', width: '100%' }}>
+        <ul style={ulStyle}>
           {
             todos.map(({ name, done }, index) => (
               <Todo
@@ -96,3 +79,28 @@ export default class Todos extends Component {
     );
   }
 }
+
+const containerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'column',
+  minWidth: '300px',
+  width: '50vw',
+  margin: '1rem auto',
+};
+const paragraphStyle = {
+  fontSize: '1.5rem',
+  width: '50vw',
+  textAlign: 'center',
+  borderBottom: '1px solid black',
+  paddingBottom: '0.5rem',
+};
+const inputStyle = {
+  padding: '7px 12px',
+  border: '1px solid #bdbdbd',
+  borderRadius: '4px',
+  fontSize: '1rem',
+  fontWeight: '500',
+  margin: '1rem 0',
+};
+const ulStyle = { padding: '1rem', width: '100%' };

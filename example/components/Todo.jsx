@@ -1,4 +1,4 @@
-import { Component } from '../../src';
+import { Component } from '../../src/fake-react/refactor/Component';
 
 export default class Todo extends Component {
   template() {

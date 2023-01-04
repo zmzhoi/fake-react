@@ -33,6 +33,7 @@ export class Component<P = {}, S = {}> {
     const nextVirtualDom = this.template();
     const parent = this.container?.parentElement as HTMLElement;
     const index = [...parent.childNodes].indexOf(this.container as HTMLElement);
+
     updateRealDom(parent, nextVirtualDom, currentVirtualDom as ReactElement, index);
     this.currentVirtualDom = nextVirtualDom;
   }
