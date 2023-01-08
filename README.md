@@ -14,13 +14,15 @@ React 동작 방식을 이해하기 위해 만들어보는 ~~가짜 리액트~~
   - [ ] `DidUpdte()`
 - [ ] Event delegation.
 
-## Installation
+## How to test
+
+### Installation
 
 ```
 npm i fake-react2
 ```
 
-## Babel setup
+### Setup babel
 
 ```json
 {
@@ -37,7 +39,7 @@ npm i fake-react2
 }
 ```
 
-## Usage
+### Usage
 
 ```javascript
 import { renderRoot, Component } from 'fake-react2';
