@@ -1,13 +1,16 @@
 {
   "name": "fake-react2",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Fake React",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "NODE_ENV=development tsup --watch",
     "build": "tsup"
   },
-  "keywords": ["react"],
+  "keywords": [
+    "react"
+  ],
   "author": "zmzhoi",
   "license": "zmzhoi <zmzhoi@gmail.com>",
   "exports": {

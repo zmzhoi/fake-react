@@ -2,7 +2,7 @@ import type { ReactNode, ReactComponent, ReactConstructorComponent } from 'src/t
 import { createElement } from './FakeReact';
 import { Component } from './Component';
 import { convertToInlineStyle } from 'src/libs/utils';
-import { createFiber, fibers } from './Fibers';
+import { Fiber, fibers } from './Fibers';
 
 function isChanged(current: ReactComponent | string, next: ReactComponent | string) {
   if (typeof current === 'string' && typeof next === 'string') {
@@ -102,14 +102,16 @@ function isChangedInstanceProps(
       return true;
     }
 
-    if (
-      prop === 'style' &&
-      convertToInlineStyle(current.props[prop]) !== convertToInlineStyle(next.props[prop])
-    ) {
-      return true;
-    } else if (current.props[prop] !== next.props[prop]) {
-      // TODO: Should children diffing check.
-      return true;
+    if (prop === 'children') {
+      continue;
+    } else if (prop === 'style') {
+      if (convertToInlineStyle(current.props[prop]) !== convertToInlineStyle(next.props[prop])) {
+        return true;
+      }
+    } else {
+      if (current.props[prop] !== next.props[prop]) {
+        return true;
+      }
     }
   }
 
@@ -119,53 +121,67 @@ export function updateInstance(
   context: Component,
   current: ReactNode,
   next: ReactNode,
+  fiber: Fiber,
   parent: HTMLElement,
   index: number,
 ) {
-  const fiber = fibers.get(context.id as string);
-
   // next가 컴포넌트인 경우
   if (next && typeof next === 'object' && next.type instanceof Function) {
     if (current === null || typeof current !== 'object' || current.type !== next.type) {
       // next와 current가 다른 경우 -> 새로 생성
-      // const _next = next as ReactConstructorComponent;
-      // const { instance, createdElement } = createInstance(_next, parent, fiber.index, fiber);
-
+      const id = crypto.randomUUID();
       const constructor = next.type;
       const instance = new constructor(next.props);
-
-      const id = crypto.randomUUID();
       instance.id = id;
-      const childFiber = createFiber(id, instance, parent, index);
-      fibers.set(childFiber);
 
-      fiber.child = childFiber;
-
-      updateInstance(instance, current, instance.template(), parent, index);
-    } else {
-      // next와 current가 같은 경우 -> 리렌더링
-
-      // Error check
-      if (fiber.child === null) {
-        throw new Error('Cannot find child fiber');
+      const nextElement = createElement(instance.render(), parent, index);
+      if (nextElement) {
+        if (current === null) {
+          parent.appendChild(nextElement);
+        } else {
+          parent.replaceChild(nextElement, parent.childNodes[index]);
+        }
       }
 
+      const newFiber: Fiber = {
+        id,
+        name: constructor.name,
+        context: instance,
+        index,
+        parent,
+        dom: nextElement,
+      };
+      fibers.set(newFiber);
+    } else {
+      // next와 current가 같은 경우 -> 리렌더링
       const _current = current as ReactConstructorComponent;
       const _next = next as ReactConstructorComponent;
       if (isChangedInstanceProps(_current, _next)) {
-        // TODO: Check children too.
-        const childContext = fiber.child.context;
-        const currentInContext = childContext.template();
-        childContext.props = _next.props;
-        const nextInContext = childContext.template();
+        const id = crypto.randomUUID();
+        const constructor = _next.type;
+        const instance = new constructor(_next.props);
+        instance.id = id;
 
-        updateInstance(childContext, currentInContext, nextInContext, parent, index);
+        const nextElement = createElement(instance.render(), parent, index);
+        if (nextElement) {
+          parent.replaceChild(nextElement, parent.childNodes[index]);
+        }
+
+        const newFiber: Fiber = {
+          id,
+          name: constructor.name,
+          context: instance,
+          index,
+          parent,
+          dom: nextElement,
+        };
+        fibers.set(newFiber);
       }
     }
   } else {
     // next가 일반 element인 경우
 
-    updateElement(context, current, next, parent, fiber.index);
+    updateElement(context, current, next, fiber, parent, index);
   }
 }
 
@@ -173,6 +189,7 @@ function updateElement(
   context: Component,
   current: ReactNode,
   next: ReactNode,
+  fiber: Fiber,
   parent: HTMLElement,
   index = 0,
 ) {
@@ -197,18 +214,12 @@ function updateElement(
       for (let i = 0; i < maxLen; i++) {
         updateInstance(
           context,
-          current.props.children[i],
-          next.props.children[i],
+          current.props.children[i] || null,
+          next.props.children[i] || null,
+          fiber,
           parent.childNodes[index] as HTMLElement,
           i,
         );
-        // updateElement(
-        //   context,
-        //   current.props.children[i],
-        //   next.props.children[i],
-        //   parent.childNodes[index] as HTMLElement,
-        //   i,
-        // );
       }
     }
   }

@@ -16,7 +16,7 @@ if (DEV) {
 } else {
   config['entry'] = ['src/index.tsx', 'src/jsx-runtime/index.ts'];
   config['outDir'] = 'dist';
-  config['dts'] = './src/index.tsx';
+  config['dts'] = true;
   config['minify'] = true;
 }
 export default config;

@@ -1,4 +1,4 @@
-import { Component } from '../src/fake-react/refactor/Component';
+import { Component } from '../src/fake-react/Component';
 import Header from './components/Header';
 import Template from './components/Template';
 import Todos from './components/Todos';
@@ -9,14 +9,12 @@ export default class App extends Component {
       count: 0,
     };
   }
-  template() {
+
+  render() {
     return (
       <Template>
-        {/* <Header>Todo app using fake-react</Header> */}
-        {/* 1 */}
+        <Header>Todo app using fake-react</Header>
         <Todos title="To-do" />
-        {/* <div>{this.state.count}</div> */}
-        {/* <button onClick={() => this.setState({ count: this.state.count + 1 })}></button> */}
       </Template>
     );
   }

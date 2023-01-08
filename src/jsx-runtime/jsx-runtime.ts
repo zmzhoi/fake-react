@@ -1,5 +1,5 @@
-import { ReactComponent } from 'fake-react/jsx-runtime';
 import { Component } from 'src/fake-react/Component';
+import type { ReactComponent } from '../types';
 
 function handleChildren(children: string | number | any[] | ReactComponent | null) {
   if (Array.isArray(children)) {

@@ -1,7 +1,7 @@
-import { Component } from '../../src/fake-react/refactor/Component';
+import { Component } from '../../src/fake-react/Component';
 
 export default class Header extends Component {
-  template() {
+  render() {
     return (
       <h1
         style={{

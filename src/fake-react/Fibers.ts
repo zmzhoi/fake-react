@@ -5,8 +5,8 @@ export interface Fiber {
   name: string;
   context: Component;
   parent: HTMLElement;
-  child: Fiber | null;
   index: number;
+  dom: HTMLElement | Text | null;
 }
 
 class Fibers {
@@ -22,19 +22,8 @@ class Fibers {
   set(fiber: Fiber) {
     this.fibers[fiber.id] = fiber;
   }
+  remove(id: string) {
+    delete this.fibers[id];
+  }
 }
-
-export function createFiber(id: string, instance: Component, parent: HTMLElement, index = 0) {
-  const fiber: Fiber = {
-    id,
-    name: instance.constructor.name,
-    context: instance,
-    index,
-    parent,
-    child: null,
-  };
-
-  return fiber;
-}
-
 export const fibers = new Fibers();

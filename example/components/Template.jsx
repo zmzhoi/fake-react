@@ -1,7 +1,7 @@
-import { Component } from '../../src/fake-react/refactor/Component';
+import { Component } from '../../src/fake-react/Component';
 
 export default class Template extends Component {
-  template() {
+  render() {
     return <div style={{ width: '100vw', height: '100vh' }}>{this.props.children}</div>;
   }
 }

@@ -1,23 +1,44 @@
 # Fake React
+
 React 동작 방식을 이해하기 위해 만들어보는 ~~가짜 리액트~~
 
 ## Goals.
-- [x] JSX Rendering.
-- [x] Diffing virtual dom. 
-- [x] Detect State and Props.
-- [ ] Handle `onChange` event of input[type=text].
-- [ ] Lifecycle.
-- [ ] Optimization, Refactoring.
-- [ ] Event delegation.
-- [ ] Function component with hooks.
 
+- [x] JSX Rendering.
+- [x] Detect Changes of State and Props.
+- [x] React Component.
+  - [x] Claas Component
+  - [ ] Function Component
+- Lifecycle.
+  - [ ] `DidMount()`
+  - [ ] `DidUpdte()`
+- [ ] Event delegation.
 
 ## Installation
+
 ```
 npm i fake-react2
 ```
 
+## Babel setup
+
+```json
+{
+  "presets": [
+    "@babel/preset-env",
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic",
+        "importSource": "fake-react2"
+      }
+    ]
+  ]
+}
+```
+
 ## Usage
+
 ```javascript
 import { renderRoot, Component } from 'fake-react2';
 
@@ -36,7 +57,7 @@ class Counter extends Component {
     this.setState({ count: Math.max(this.state.count - 1, 0) });
   };
 
-  template() {
+  render() {
     return (
       <div>
         <span>{this.state.count}</span>
@@ -48,10 +69,8 @@ class Counter extends Component {
 }
 
 class App extends Component {
-  template() {
-    return (
-      <Counter />
-    );
+  render() {
+    return <Counter />;
   }
 }
 

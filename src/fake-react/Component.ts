@@ -1,40 +1,32 @@
-import type { ReactElement } from '../jsx-runtime';
-import { updateRealDom } from './FakeReact';
+import { fibers } from './Fibers';
+import { updateInstance } from './Updator';
 
 export type SetStateFunction<S> = (previousState: S) => S;
 
-export class Component<P = {}, S = {}> {
-  container?: HTMLElement;
+export class Component<P = any, S = any> {
+  id?: string;
   props: P;
   state: S;
-  mounted: boolean;
-  currentVirtualDom?: ReactElement;
+  private mounted: boolean;
 
   constructor(props: P) {
     this.props = props;
-    this.state = {} as S;
+    this.state = undefined as S;
     this.mounted = false;
 
     this.init();
   }
 
   init() {}
-  didMount() {}
-  didUpdate() {}
-  template() {
-    return '';
+  render() {
+    return null;
   }
-  setState(nextState: S) {
-    this.state = nextState;
-    this.rerender();
-  }
-  rerender() {
-    const currentVirtualDom = this.currentVirtualDom;
-    const nextVirtualDom = this.template();
-    const parent = this.container?.parentElement as HTMLElement;
-    const index = [...parent.childNodes].indexOf(this.container as HTMLElement);
 
-    updateRealDom(parent, nextVirtualDom, currentVirtualDom as ReactElement, index);
-    this.currentVirtualDom = nextVirtualDom;
+  setState(nextState: S) {
+    const current = this.render();
+    this.state = nextState;
+    const next = this.render();
+    const fiber = fibers.get(this.id as string);
+    updateInstance(this, current, next, fiber, fiber.parent, fiber.index);
   }
 }

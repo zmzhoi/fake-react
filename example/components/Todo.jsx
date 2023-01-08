@@ -1,8 +1,8 @@
-import { Component } from '../../src/fake-react/refactor/Component';
+import { Component } from '../../src/fake-react/Component';
 
 export default class Todo extends Component {
-  template() {
-    const { index, name, done, onToggle } = this.props;
+  render() {
+    const { index, name, done, onToggle, onRemove } = this.props;
     return (
       <li style={{ marginBottom: '1rem' }}>
         <div
@@ -29,6 +29,23 @@ export default class Todo extends Component {
           onClick={() => onToggle(index)}
         >
           {done ? 'Redo' : 'Complete'}
+        </button>
+        <button
+          style={{
+            color: 'white',
+            fontSize: '0.9rem',
+            background: 'gray',
+            border: 'none',
+            borderRadius: '3px',
+            padding: '6px 0',
+            boxSizing: 'border-box',
+            width: '50px',
+            cursor: 'pointer',
+            marginLeft: '0.5rem',
+          }}
+          onClick={() => onRemove(index)}
+        >
+          삭제
         </button>
       </li>
     );

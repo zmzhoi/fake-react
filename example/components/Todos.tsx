@@ -1,7 +1,16 @@
-import { Component } from '../../src/fake-react/refactor/Component';
+import { Component } from '../../src/fake-react/Component';
 import Todo from './Todo';
 
-export default class Todos extends Component {
+interface Props {
+  title: string;
+}
+
+interface State {
+  keyword: string;
+  todos: { name: string; done: boolean }[];
+}
+
+export default class Todos extends Component<Props, State> {
   init() {
     this.state = {
       keyword: '',
@@ -12,12 +21,19 @@ export default class Todos extends Component {
     };
   }
 
-  onToggle = (index) => {
+  onToggle = (index: number) => {
     this.setState({
       ...this.state,
       todos: this.state.todos.map((todo, i) =>
         i === index ? { ...todo, done: !todo.done } : todo,
       ),
+    });
+  };
+
+  onRemove = (index: number) => {
+    this.setState({
+      ...this.state,
+      todos: this.state.todos.filter((_, i) => i !== index),
     });
   };
 
@@ -48,8 +64,8 @@ export default class Todos extends Component {
     }
   };
 
-  template() {
-    const { onChange, onKeyDown, onToggle } = this;
+  render() {
+    const { onChange, onKeyDown, onToggle, onRemove } = this;
     const { keyword, todos } = this.state;
     const { title } = this.props;
 
@@ -67,10 +83,11 @@ export default class Todos extends Component {
           {
             todos.map(({ name, done }, index) => (
               <Todo
-                index={index}
+                index={index} //
                 name={name}
                 done={done}
-                onToggle={onToggle} //
+                onToggle={onToggle}
+                onRemove={onRemove}
               />
             )) //
           }

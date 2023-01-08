@@ -1,4 +1,4 @@
-import { Component } from 'src/fake-react/refactor/Component';
+import { Component } from 'src/fake-react/Component';
 
 export type TagName = keyof HTMLElementTagNameMap;
 export type Props = Record<string, any> & { children: (ReactComponent | string)[] };
