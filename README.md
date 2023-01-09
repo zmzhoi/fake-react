@@ -1,6 +1,6 @@
 # Fake React
 
-React 동작 방식을 이해하기 위해 만들어보는 ~~가짜 리액트~~
+React 동작 방식을 이해하기 위해 만들어보는 ~~가짜 리액트~~.
 
 ## Goals.
 
@@ -26,10 +26,12 @@ npm i fake-react2
 
 ```json
 {
-  "presets": [
-    "@babel/preset-env",
+  //
+  // ... omitted
+  //
+  "plugins": [
     [
-      "@babel/preset-react",
+      "@babel/plugin-transform-react-jsx",
       {
         "runtime": "automatic",
         "importSource": "fake-react2"
@@ -38,6 +40,8 @@ npm i fake-react2
   ]
 }
 ```
+
+> `@babel/preset-react` 를 사용해도 됩니다.
 
 ### Usage
 
