@@ -21,7 +21,6 @@ export class Component<P = any, S = any> {
   render() {
     return null;
   }
-
   setState(nextState: S) {
     const current = this.render();
     this.state = nextState;

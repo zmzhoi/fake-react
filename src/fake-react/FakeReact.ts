@@ -1,7 +1,6 @@
 import { convertToInlineStyle } from 'src/libs/utils';
 import { ReactNode, Props, ReactConstructorComponent } from '../types';
 import { Fiber, fibers } from './Fibers';
-// import { fibers, Fiber } from './Fibers';
 
 export function renderRoot(element: ReactNode, root: HTMLElement) {
   if (!root) {
@@ -13,8 +12,6 @@ export function renderRoot(element: ReactNode, root: HTMLElement) {
   }
 
   root.appendChild(createElement(element, root) as Node);
-
-  // console.log(fibers);
 }
 
 export function createElement(
@@ -59,7 +56,8 @@ export function createInstance(element: ReactConstructorComponent, parent: HTMLE
   const instance = new constructor(element.props);
   instance.id = id;
 
-  const createdElement = createElement(instance.render(), parent, index);
+  const template = (instance.render() as ReactNode) || null;
+  const createdElement = createElement(template, parent, index);
   const fiber: Fiber = {
     id,
     name: constructor.name,
@@ -105,7 +103,6 @@ function setAttribute(element: HTMLElement, attr: string, val: string) {
       element.setAttribute(attr, 'true');
       element[attr] = true;
     } else {
-      // why ?
       element[attr] = false;
     }
   } else {
@@ -120,6 +117,7 @@ function setEventListener(element: HTMLElement, event: string, handler: () => vo
     element.tagName.toLocaleLowerCase() === 'input' &&
     element.getAttribute('type')?.toLocaleLowerCase() === 'text'
   ) {
+    // input[type=text]의 onChange로 등록했던 change 이벤트 핸들러는 input 이벤트로 치환해서 등록한다.
     element.addEventListener('input', handler);
   } else {
     element.addEventListener(eventName, handler);
